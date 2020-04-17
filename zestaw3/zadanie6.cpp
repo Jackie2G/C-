@@ -8,7 +8,7 @@
 #include <cstdlib>
 using namespace std;
 
-int count_columns(const char *nazwaPliku){
+int count_columns(string nazwaPliku){
     fstream inputStream{ nazwaPliku};
     if (inputStream.fail()) return -1;
     string dummyLine;
@@ -19,7 +19,7 @@ int count_columns(const char *nazwaPliku){
     return numCollums;
 }
 
-int count_rows(const char *nazwaPliku){
+int count_rows(string nazwaPliku){
     fstream inputStream{ nazwaPliku };
     if (inputStream.fail()) return -1;
     int lines = 0;
@@ -32,11 +32,11 @@ int count_rows(const char *nazwaPliku){
     return lines;
 }
 
-int sizeX = count_rows("dane2.txt");
-int sizeY = count_columns("dane2.txt");
-double* tab = new double[sizeX*sizeY];
+// int sizeX = count_rows("dane2.txt");
+// int sizeY = count_columns("dane2.txt");
+// double* tab = new double[sizeX*sizeY];
 
-int obliczParametry(const char *nazwaPliku, double &a, double &b){
+int obliczParametry(string nazwaPliku, double &a, double &b, int sizeX, int sizeY, double* tab){
     fstream inputStream{ nazwaPliku };
     if (inputStream.fail()) return -1;
     for (int i = 0; i < sizeX; i++){
@@ -64,7 +64,12 @@ int obliczParametry(const char *nazwaPliku, double &a, double &b){
 
 int main(){
     double a = 0, b = 0;
-    obliczParametry("dane2.txt", a, b);
+    string plik;
+    cin >> plik;
+    int sizeX = count_rows("dane2.txt");
+    int sizeY = count_columns("dane2.txt");
+    double* tab = new double[sizeX*sizeY];
+    obliczParametry(plik, a, b, sizeX, sizeY, tab);
     printf("Wspolczynniki a = %lf, b = %lf\n", a, b);
     return 0;
 }
