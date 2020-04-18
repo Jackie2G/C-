@@ -6,6 +6,28 @@ using namespace std ;
 class Point {
 
   // tutaj przepisz klase Point z poprzednich zajec
+    private:
+    int x, y;
+    public:
+    Point(){
+        x = 0;
+        y = 0;
+    }
+    Point(int nx, int ny){
+        x = nx;
+        y = ny;
+    }
+    int getX() const { return x; }
+
+    int getY() const { return y; }
+
+    void setX(const int new_x){
+        x = new_x;
+    }
+
+    void setY(const int new_y){
+        y = new_y;
+    }
   
 };
 
@@ -14,6 +36,13 @@ class PointArray {
   Point *points ;
   void resize ( int newSize ) {
     //Metoda, ktora skraca, badz wydluza tablice points wg rozmiaru podanego jako argument*/
+    Point *ptsToCopy = points;
+    points = new Point[newSize];
+    for (int i = 0; i < newSize; i++){
+      points[i] = ptsToCopy[i];
+    }
+    size = newSize;
+    delete [] ptsToCopy;
   }
   
   public:
@@ -26,11 +55,21 @@ class PointArray {
 
   PointArray (const Point ptsToCopy [] , const int toCopySize) {
      //konstruktor
+    size = toCopySize;
+    points = new Point[size];
+    for (int i = 0; i < size; i++){
+      points[i] = ptsToCopy[i];
+    }
 
   }
 
   PointArray ( const PointArray & other ) {
      //konstruktor kopiujacy.
+    size = other.size;
+    points = new Point[size];
+    for (int i = 0; i < size; i++){
+      points[i] = other.points[i];
+    }
   }
 
 
@@ -45,18 +84,41 @@ class PointArray {
 
   void push_back ( const Point & p ) {
     /*Zaimplementuj metode, ktora dodaje element na koniec tablicy. Uzyj metody resize*/
+    resize(size + 1);
+    points[size - 1] = p;
   }
 
 
 
   void insert ( const int pos , const Point & p ) {
     /*Zaimplementuj metode, ktora wstawia element na pozycje pos. Uzyj metody resize*/
+    if (pos < size){
+      resize(size + 1);
+      for (int i = size - 1; i > pos; i--){
+        points[i] = points[i - 1];
+      }
+      points[pos] = p;
+    }
+    else if (pos == size){
+      push_back(p);
+    }
+    else{
+      resize(pos + 1);
+      points[pos] = p;
+    }
   }
 
 
 
   void remove ( const int pos ) {
-    /*Zaimplementuj metode, ktora usuwa element z pozycji pos. Uzyj metody resize*/  
+    /*Zaimplementuj metode, ktora usuwa element z pozycji pos. Uzyj metody resize*/
+    Point last_one = points[size - 1];  
+    resize(size - 1);
+    int i = pos;
+    for(i; i < size - 1; i++){
+      points[i] = points[i + 1];
+    }
+    points[i] = last_one;
   }
 
 
@@ -65,14 +127,14 @@ class PointArray {
   void print(){
     if(getSize() == 0) cout << "Pusta tablica" << endl;
     for(int i = 0; i < getSize(); i++){
-        cout << "[" << i << "] " << s << ": " << points[i].getX() << "\t" << points[i].getY() << endl;
+        cout << "[" << i << "] " << ": " << points[i].getX() << "\t" << points[i].getY() << endl;
     }
   }
   
 
   int getSize () const { 
   //metoda zwracajaca aktualny rozmiar obiektu PointArray
-  
+    return size;
   }
 
 };
